@@ -1,0 +1,147 @@
+{
+    "abstract": "From the Treaty of Versailles to Prohibition, the events of that year shaped America, and the world, for a century to come. ",
+    "web_url": "https://www.nytimes.com/2018/12/31/opinion/1919-america.html",
+    "snippet": "From the Treaty of Versailles to Prohibition, the events of that year shaped America, and the world, for a century to come. ",
+    "lead_paragraph": "Throughout 2019, The New York Times Opinion section will publish an occasional series of essays on the ways in which the events of 1919 shaped the following century. ",
+    "source": "The New York Times",
+    "multimedia": [
+        {
+            "rank": 0,
+            "subtype": "xlarge",
+            "caption": null,
+            "credit": null,
+            "type": "image",
+            "url": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-articleLarge.jpg",
+            "height": 467,
+            "width": 600,
+            "subType": "xlarge",
+            "crop_name": "articleLarge",
+            "legacy": {
+                "xlarge": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-articleLarge.jpg",
+                "xlargewidth": 600,
+                "xlargeheight": 467
+            }
+        },
+        {
+            "rank": 0,
+            "subtype": "jumbo",
+            "caption": null,
+            "credit": null,
+            "type": "image",
+            "url": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-jumbo.jpg",
+            "height": 797,
+            "width": 1024,
+            "subType": "jumbo",
+            "crop_name": "jumbo",
+            "legacy": {}
+        },
+        {
+            "rank": 0,
+            "subtype": "superJumbo",
+            "caption": null,
+            "credit": null,
+            "type": "image",
+            "url": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-superJumbo.jpg",
+            "height": 1594,
+            "width": 2048,
+            "subType": "superJumbo",
+            "crop_name": "superJumbo",
+            "legacy": {}
+        },
+        {
+            "rank": 0,
+            "subtype": "thumbnail",
+            "caption": null,
+            "credit": null,
+            "type": "image",
+            "url": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-thumbStandard.jpg",
+            "height": 75,
+            "width": 75,
+            "subType": "thumbnail",
+            "crop_name": "thumbStandard",
+            "legacy": {
+                "thumbnail": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-thumbStandard.jpg",
+                "thumbnailwidth": 75,
+                "thumbnailheight": 75
+            }
+        },
+        {
+            "rank": 0,
+            "subtype": "thumbLarge",
+            "caption": null,
+            "credit": null,
+            "type": "image",
+            "url": "images/2019/01/01/opinion/01Widmer1-Sub/01Widmer1-Sub-thumbLarge.jpg",
+            "height": 150,
+            "width": 150,
+            "subType": "thumbLarge",
+            "crop_name": "thumbLarge",
+            "legacy": {}
+        }
+    ],
+    "headline": {
+        "main": "1919: The Year of the Crack-Up",
+        "kicker": null,
+        "content_kicker": null,
+        "print_headline": "",
+        "name": null,
+        "seo": null,
+        "sub": null
+    },
+    "keywords": [
+        {
+            "name": "subject",
+            "value": "United States Politics and Government",
+            "rank": 1,
+            "major": "N"
+        },
+        {
+            "name": "subject",
+            "value": "New Year",
+            "rank": 2,
+            "major": "N"
+        },
+        {
+            "name": "organizations",
+            "value": "League of Nations",
+            "rank": 3,
+            "major": "N"
+        },
+        {
+            "name": "persons",
+            "value": "Wilson, Woodrow",
+            "rank": 4,
+            "major": "N"
+        },
+        {
+            "name": "glocations",
+            "value": "Europe",
+            "rank": 5,
+            "major": "N"
+        }
+    ],
+    "pub_date": "2019-01-01T00:00:03+0000",
+    "document_type": "article",
+    "news_desk": "OpEd",
+    "section_name": "Opinion",
+    "byline": {
+        "original": "By Ted Widmer",
+        "person": [
+            {
+                "firstname": "Ted",
+                "middlename": null,
+                "lastname": "Widmer",
+                "qualifier": null,
+                "title": null,
+                "role": "reported",
+                "organization": "",
+                "rank": 1
+            }
+        ],
+        "organization": null
+    },
+    "type_of_material": "Op-Ed",
+    "_id": "nyt://article/b205ee80-0859-514e-be2a-b8ecf0cc3b95",
+    "word_count": 2248,
+    "uri": "nyt://article/b205ee80-0859-514e-be2a-b8ecf0cc3b95"
+}
