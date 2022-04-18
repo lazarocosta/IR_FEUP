@@ -1,33 +1,49 @@
-import requests
-import json
-params = {"api-key":"0A51B92BLwrho7TvmF5b78H274U2FtcB"}
-year=2019
-month=1
+import os
+import uuid
+import pandas as pd
+from tabulate import tabulate
+import pyterrier as pt
+if not pt.started():
+      pt.init()
 
-x=2020
-#while x = < 2022:
-docs = []
-receive = requests.get('https://api.nytimes.com/svc/archive/v1/'+ str(year) +'/'+ str(month) +'.json', params=params)
-with open('records.json','a') as jsonFile:
-    #jsonfile.write(receive.json())
-    #f.write('ola')
-    for doc in receive.json()['response']['docs']:
-        newdoc= {
-            "abstract": doc['abstract'],
-            "snippet": doc['snippet'],
-            "lead_paragraph": doc['lead_paragraph'],
-            "keywords": doc["keywords"],
-            "pub_date": doc['pub_date'],
-            "word_count": doc['word_count'],
-            "_id":doc['_id']
-        }
-        docs.append(newdoc)
-    jsonFile.write(json.dumps(docs))
 
-#print(receive.url)
+##Get dataset
+dataset = pt.get_dataset("vaswani")
+print("Files in vaswani corpus: %s " % dataset.get_corpus())
+index_path = "./index/index" + str(uuid.uuid1())
 
-#aDict = {"a":54, "b":87}
-#jsonString = json.dumps(aDict)
-#jsonFile = open("data.json", "a")
-#jsonFile.write(jsonString)
-#jsonFile.close()
+# build the index
+indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
+# this downloads the file msmarco-docs.trec.gz
+indexref = indexer.index(dataset.get_corpus())
+print(indexref.toString())
+
+# load the index, print the statistics
+index = pt.IndexFactory.of(indexref)
+print(index.getCollectionStatistics().toString())
+
+tf_idf = pt.BatchRetrieve(index, wmodel="TF_IDF")
+bm25 = pt.BatchRetrieve(index, wmodel="BM25")
+pl2 = pt.BatchRetrieve(index, wmodel="PL2")
+
+print("Experiment:")
+dtExperiment = pt.Experiment(
+    [tf_idf, bm25, pl2],
+    dataset.get_topics(),
+    dataset.get_qrels(), 
+    eval_metrics=["P.5", "P.10", "ndcg_cut.10", "map"],
+    round={"map" : 3},)
+    #baseline=0)
+
+print(dtExperiment)
+print("\n\n")
+
+
+
+dtBatch=pt.BatchRetrieve(indexref).search("mathematical")
+#topics = pd.DataFrame([["2", "experimental results"]],columns=['qid','query'])
+dtBatch= dtBatch.head(10)
+
+print(dtBatch)
+
+
