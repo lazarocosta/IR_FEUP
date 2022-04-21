@@ -7,57 +7,53 @@ if not pt.started():
     pt.init()
 
 
-##print(pt.list_datasets())
-
-
 ##Get dataset
-#dataset = pt.get_dataset("vaswani") # funciona 10M
+dataset = pt.get_dataset("vaswani") # funciona 10M
 #dataset = pt.get_dataset("trec-deep-learning-docs")  #7.9G funciona == msmarco_document
 #dataset = pt.get_dataset('msmarco_document') #7.9G funciona
 
-dataset = pt.get_dataset('trec-deep-learning-passages') #900M funciona ==msmarco_passage
+#dataset = pt.get_dataset('trec-deep-learning-passages') #900M funciona ==msmarco_passage
 #dataset = pt.get_dataset('msmarco_passage') #900M funciona
 
-#topics = dataset.get_topics()
-qrels = dataset.get_qrels()
+#topics = dataset.get_topics('train')
+#qrels = dataset.get_qrels()
 
 
 
-#print("Files in vaswani corpus: %s " % dataset.get_corpus())
-#index_path = "./index/index" + str(uuid.uuid1())
+print("Files in vaswani corpus: %s " % dataset.get_corpus())
+index_path = "./index/index" + str(uuid.uuid1())
 
 # build the index
-#indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
+indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
 # this downloads the file msmarco-docs.trec.gz
-#indexref = indexer.index(dataset.get_corpus())
+indexref = indexer.index(dataset.get_corpus())
 #indexref = dataset.get_index()
 
-#print(indexref.toString())
+print(indexref.toString())
 
 # load the index, print the statistics
-#index = pt.IndexFactory.of(indexref)
-#print(index.getCollectionStatistics().toString())
-"""
+index = pt.IndexFactory.of(indexref)
+print(index.getCollectionStatistics().toString())
+
 tf_idf = pt.BatchRetrieve(index, wmodel="TF_IDF")
 bm25 = pt.BatchRetrieve(index, wmodel="BM25")
 pl2 = pt.BatchRetrieve(index, wmodel="PL2")
 pipeline = bm25 >> (tf_idf ** pl2)
 
 
-pipeline = pt.FeaturesBatchRetrieve(index, wmodel="BM25", features=["WMODEL:Tf", "WMODEL:PL2"])"""
+pipeline = pt.FeaturesBatchRetrieve(index, wmodel="BM25", features=["WMODEL:Tf", "WMODEL:PL2"])
 
 print("Experiment:")
 
-"""dtExperiment = pt.Experiment(
+dtExperiment = pt.Experiment(
     [tf_idf, bm25, pl2, pipeline],
     dataset.get_topics(),
     dataset.get_qrels(), 
     eval_metrics=[P@5, P@10, "map", nDCG@5, nDCG@10],
     round={"map" : 3},
     save_dir="./results/")
-    #baseline=0)
 
-print(dtExperiment)"""
+print(dtExperiment)
 
 
 
