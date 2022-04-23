@@ -1,0 +1,74 @@
+
+-----------------------
+Query-ID QO Doc-ID REL
+1185869	0	0	1
+
+Query-ID
+1185869	what was the immediate impact of the success of the manhattan project?
+
+Doc-ID
+0 The presence of communication amid scientific minds was equally important to the success of the Manhattan Project as scientific intellect was. The only cloud hanging over the impressive achievement of the atomic researchers and engineers is what their success truly meant; hundreds of thousands of innocent lives obliterated.
+---------------
+Query-ID QO Doc-ID REL
+597651	0	49	1
+
+Query-ID
+597651	what color is amber urine
+
+Doc-ID
+49 Colorâurine can be a variety of colors, most often shades of yellow, from very pale or colorless to very dark or amber. Unusual or abnormal urine colors can be the result of a disease process, several medications (e.g., multivitamins can turn urine bright yellow), or the result of eating certain foods.
+---------------------------
+Query-ID QO Doc-ID REL
+312651	0	616	1
+
+Query-ID
+312651	how much does an average person make for tutoring
+
+Doc-ID
+616 In-home tutors can earn anywhere from $10 to $80 an hour, depending on the type of lesson, the studentâs skill and age level and the tutorâs experience. Tutors often charge more for older students or those who require more advanced lessons.
+--------------------------
+Query-ID QO Doc-ID REL
+80385	0	723	1
+
+Query-ID
+80385	can you use a calculator on the compass test
+
+Doc-ID
+723 Calculators may be used on the COMPASS Pre-Algebra, Algebra, College Algebra, Geometry, and Trigonometry tests provided they meet the requirements listed below. Electronic writing pads or pen-input devicesâThe Sharp EL 9600 is permitted. Models with paper tapesâThe paper must be removed.
+----------------------------------
+
+Highest TF
+the 0.061
+of 0.032
+and 0.027
+to 0.025
+in 0.021
+is 0.018
+for 0.011
+or 0.008
+you 0.008
+that 0.008
+
+Highest IDF
+mesotherapy 11.82
+bmxer 11.82
+meteoroids 11.82
+meteoroid 11.82
+bmxers 11.82
+meteora 11.82
+meteo 11.82
+bna 11.82
+metazoans 11.82
+metazoa 11.82
+
+Highest TF-IDF
+the 0.482
+of 0.289
+and 0.254
+to 0.249
+in 0.219
+is 0.206
+for 0.151
+you 0.143
+or 0.133
+that 0.119

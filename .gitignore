@@ -2,3 +2,5 @@ volumes/
 index/
 results/
 sklearn/
+.idea/
+__pycache__/
