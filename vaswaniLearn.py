@@ -9,10 +9,6 @@ if not pt.started():
 
 ##Get dataset
 dataset = pt.get_dataset("vaswani") # funciona 10M
-#dataset = pt.get_dataset("trec-deep-learning-docs")  #7.9G funciona == msmarco_document
-#dataset = pt.get_dataset('msmarco_document') #7.9G funciona
-
-#dataset = pt.get_dataset('trec-deep-learning-passages') #900M funciona ==msmarco_passage
 #dataset = pt.get_dataset('msmarco_passage') #900M funciona
 
 #topics = dataset.get_topics('train')
@@ -24,7 +20,7 @@ print("Files in vaswani corpus: %s " % dataset.get_corpus())
 index_path = "./index/index" + str(uuid.uuid1())
 
 # build the index
-indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
+#indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
 # this downloads the file msmarco-docs.trec.gz
 #indexref = indexer.index(dataset.get_corpus())
 indexref = dataset.get_index()
@@ -57,7 +53,7 @@ qrels = dataset.get_qrels()
 
 train_topics, valid_topics, test_topics = np.split(topics, [int(.6*len(topics)), int(.8*len(topics))])
 
-rf = RandomForestRegressor(n_estimators=400)
+rf = RandomForestRegressor(n_estimators=200)
 rf_pipe_tf = pipeline_tf >> pt.ltr.apply_learned_model(rf)
 rf_pipe_tf.fit(dataset.get_topics(), dataset.get_qrels())
 

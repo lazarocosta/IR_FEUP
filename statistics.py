@@ -63,7 +63,6 @@ def statistics(corpus, text_corpus, top_k):
     current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
     text_corpus = [text_corpus]
-    # print(corpus_document)
 
     tfidf_vector = TfidfVectorizer()
     tfidf = tfidf_vector.fit(corpus)
@@ -125,5 +124,5 @@ def statistics(corpus, text_corpus, top_k):
                 print(word, round(sum_tfidf.tolist()[0][tf_index], 3))
 
 
-result = read_corpus(corpus_path)
-statistics(result["corpus"], result["text_cospus"], 11)
+#result = read_corpus(corpus_path)
+#statistics(result["corpus"], result["text_cospus"], 11)

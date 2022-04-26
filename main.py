@@ -1,120 +1,95 @@
-import uuid
-import pandas as pd
+import numpy as np
 import pyterrier as pt
+
 from pyterrier.measures import *
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
+from sklearn import svm
+
+from pipelineFunction import pipelineFunction
 
 if not pt.started():
     pt.init()
 
 
-##print(pt.list_datasets())
+pipelines = []
+pipelinesNames = []
+dataset = pt.get_dataset('msmarco_passage')
+print("Files in msmarco_passage corpus: %s " % dataset.get_corpus())
 
+# Get Index
+indexref_stemmed_docT5query = dataset.get_index("terrier_stemmed_docT5query")
+indexref_stemmed_deepct = dataset.get_index("terrier_stemmed_deepct")
 
-##Get dataset
-#dataset = pt.get_dataset("vaswani") # funciona 10M
-#dataset = pt.get_dataset("trec-deep-learning-docs")  #7.9G funciona == msmarco_document
-#dataset = pt.get_dataset('msmarco_document') #7.9G funciona
+### Short
+topics = dataset.get_topics("test-2019")
+qrels = dataset.get_qrels("test-2019")
 
-dataset = pt.get_dataset('trec-deep-learning-passages') #900M funciona ==msmarco_passage
-#dataset = pt.get_dataset('msmarco_passage') #900M funciona
+train_topics, val_topics, test_topics = np.split(topics, [int(.6 * len(topics)), int(.8 * len(topics))])
+train_qrels, val_qrels, test_qrels = np.split(qrels, [int(.6 * len(qrels)), int(.8 * len(qrels))])
 
-#topics = dataset.get_topics()
-qrels = dataset.get_qrels()
+### Long
+"""topics = dataset.get_topics("train")
+qrels = dataset.get_qrels("train")
 
+train_topics, val_topics = np.split(topics, [int(.8 * len(topics))])
+train_qrels, val_qrels = np.split(qrels, [int(.8 * len(qrels))])
 
-
-#print("Files in vaswani corpus: %s " % dataset.get_corpus())
-#index_path = "./index/index" + str(uuid.uuid1())
-
-# build the index
-#indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
-# this downloads the file msmarco-docs.trec.gz
-#indexref = indexer.index(dataset.get_corpus())
-#indexref = dataset.get_index()
-
-#print(indexref.toString())
-
-# load the index, print the statistics
-#index = pt.IndexFactory.of(indexref)
-#print(index.getCollectionStatistics().toString())
-"""
-tf_idf = pt.BatchRetrieve(index, wmodel="TF_IDF")
-bm25 = pt.BatchRetrieve(index, wmodel="BM25")
-pl2 = pt.BatchRetrieve(index, wmodel="PL2")
-pipeline = bm25 >> (tf_idf ** pl2)
-
-
-pipeline = pt.FeaturesBatchRetrieve(index, wmodel="BM25", features=["WMODEL:Tf", "WMODEL:PL2"])"""
-
-print("Experiment:")
-
-"""dtExperiment = pt.Experiment(
-    [tf_idf, bm25, pl2, pipeline],
-    dataset.get_topics(),
-    dataset.get_qrels(), 
-    eval_metrics=[P@5, P@10, "map", nDCG@5, nDCG@10],
-    round={"map" : 3},
-    save_dir="./results/")
-    #baseline=0)
-
-print(dtExperiment)"""
-
-
-
-#dtBatch=pt.BatchRetrieve(indexref).search("mathematical")
-#topics = pd.DataFrame([["2", "experimental results"]],columns=['qid','query'])
-#dtBatch= dtBatch.head(10)
-
-#print(dtBatch)
-
-
-
+test_topics = dataset.get_topics("test-2019")
+test_qrels = dataset.get_qrels("test-2019")"""
 ####
-###                SKLearn
-
-"""from sklearn.ensemble import RandomForestRegressor
-rf = RandomForestRegressor(n_estimators=400)
-rf_pipe = pipeline >> pt.ltr.apply_learned_model(rf)
-rf_pipe.fit(dataset.get_topics(), dataset.get_qrels())
-pt.Experiment([bm25, rf_pipe], test_topics, dataset.get_qrels(), ["map"], names=["BM25 Baseline", "LTR"])"""
 
 
+print(train_qrels)
+print("Index Location:" + indexref_stemmed_docT5query)
 
-#####
-###                    GRADIENT BOOST
-"""import xgboost as xgb
-# this configures XGBoost as LambdaMART
-lmart_x = xgb.sklearn.XGBRanker(objective='rank:ndcg',
-      learning_rate=0.1,
-      gamma=1.0,
-      min_child_weight=0.1,
-      max_depth=6,
-      verbose=2,
-      random_state=42)
+# semelhante
+# pipeline_tf = bm25 >> (tf_idf ** pl2)
+pipeline_stemmed_docT5query = pt.FeaturesBatchRetrieve(indexref_stemmed_docT5query + "/data.properties", wmodel="BM25",
+                                                       features=["WMODEL:Tf", "WMODEL:PL2"])
+pipeline_stemmed_deepct = pt.FeaturesBatchRetrieve(indexref_stemmed_deepct + "/data.properties", wmodel="BM25",
+                                                   features=["WMODEL:Tf", "WMODEL:PL2"])
 
-lmart_x_pipe = pipeline >> pt.ltr.apply_learned_model(lmart_x, form="ltr")
-lmart_x_pipe.fit(train_topics, train_qrels, validation_topics, validation_qrels)
+pipelines.append(pipeline_stemmed_docT5query)
+pipelinesNames.append("stemmed_docT5query")
 
-import lightgbm as lgb
-# this configures LightGBM as LambdaMART
-lmart_l = lgb.LGBMRanker(task="train",
-    min_data_in_leaf=1,
-    min_sum_hessian_in_leaf=100,
-    max_bin=255,
-    num_leaves=7,
-    objective="lambdarank",
-    metric="ndcg",
-    ndcg_eval_at=[1, 3, 5, 10],
-    learning_rate= .1,
-    importance_type="gain",
-    num_iterations=10)
-lmart_l_pipe = pipeline >> pt.ltr.apply_learned_model(lmart_l, form="ltr")
-lmart_l_pipe.fit(train_topics, train_qrels, validation_topics, validation_qrels)
+pipelines.append(pipeline_stemmed_deepct)
+pipelinesNames.append("stemmed_deepct")
 
-pt.Experiment(
-    [bm25, lmart_x_pipe, lmart_l_pipe],
-    test_topics,
-    test_qrels,
-    ["map"],
-    names=["BM25 Baseline", "LambdaMART (xgBoost)", "LambdaMART (LightGBM)" ]
-)"""
+d_topics = {
+    "all":topics,
+    "train":train_topics,
+    "val": val_topics,
+    "test": test_topics
+}
+
+d_qrels= {
+    "all":qrels,
+    "train":train_qrels,
+    "val": val_qrels,
+    "test": test_qrels
+}
+
+nb = GaussianNB()
+pipelineFunction(pipelines, pipelinesNames, pt, nb, d_topics, d_qrels, "NaiveBayes")
+
+rf = RandomForestRegressor(n_estimators=200)
+pipelineFunction(pipelines, pipelinesNames, pt, rf, d_topics, d_qrels, "RandonForest")
+
+mlp = MLPClassifier(alpha=1e-05, hidden_layer_sizes=(5, 2), random_state=1, learning_rate=0.1, epsilon=1.0E-4,
+                    max_iter=100,
+                    solver='sgd')
+pipelineFunction(pipelines, pipelinesNames, pt, mlp, d_topics, d_qrels, "MLP")
+
+svm = svm.SVC()
+pipelineFunction(pipelines, pipelinesNames, pt, svm, d_topics, d_qrels, "SVM")
+
+"""X = [[0, 0], [1, 1], [0,1]]
+y = [0, 1,0]
+clf = svm.SVC()
+clf.fit(X, y)
+result =clf.predict([[1, 1]])
+print(result[0] )
+"""
+
