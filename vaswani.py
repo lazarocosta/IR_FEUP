@@ -2,7 +2,6 @@ import uuid
 import pandas as pd
 import pyterrier as pt
 from pyterrier.measures import *
-
 if not pt.started():
     pt.init()
 
@@ -21,39 +20,44 @@ dataset = pt.get_dataset("vaswani") # funciona 10M
 
 
 print("Files in vaswani corpus: %s " % dataset.get_corpus())
-index_path = "./index/index" + str(uuid.uuid1())
 
 # build the index
-indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
+#indexer = pt.TRECCollectionIndexer(index_path, verbose=True, blocks=False)
 # this downloads the file msmarco-docs.trec.gz
-indexref = indexer.index(dataset.get_corpus())
+#indexref = indexer.index(dataset.get_corpus())
 #indexref = dataset.get_index()
 
-print(indexref.toString())
+#print(indexref.toString())
 
 # load the index, print the statistics
-index = pt.IndexFactory.of(indexref)
+index = pt.IndexFactory.of(dataset.get_index())
 print(index.getCollectionStatistics().toString())
 
+tf = pt.BatchRetrieve(index, wmodel="Tf")
 tf_idf = pt.BatchRetrieve(index, wmodel="TF_IDF")
 bm25 = pt.BatchRetrieve(index, wmodel="BM25")
 pl2 = pt.BatchRetrieve(index, wmodel="PL2")
 pipeline = bm25 >> (tf_idf ** pl2)
 
 
-pipeline = pt.FeaturesBatchRetrieve(index, wmodel="BM25", features=["WMODEL:Tf", "WMODEL:PL2"])
+#pipeline2 = pt.FeaturesBatchRetrieve(index, wmodel="BM25", features=["WMODEL:Tf", "WMODEL:PL2"])
+
 
 print("Experiment:")
 
 dtExperiment = pt.Experiment(
-    [tf_idf, bm25, pl2, pipeline],
+    [ tf, tf_idf, bm25, pl2, pipeline],
     dataset.get_topics(),
-    dataset.get_qrels(), 
-    eval_metrics=[P@5, P@10, "map", nDCG@5, nDCG@10],
-    round={"map" : 3},
-    save_dir="./results/")
+    dataset.get_qrels(),
+    #eval_metrics=[P @ 5, P @ 10, AP(rel=2), nDCG @ 10, nDCG @ 100, MRR, MRR @ 10],
+    eval_metrics=["map", "recip_rank"],
+    #round={"P@5": 3, "P@10": 3, "AP(rel=2)": 3, "nDCG@10": 3, "nDCG@100": 3, "RR": 3, "RR@10": 3},
+    perquery=True
+   )
 
 print(dtExperiment)
+dtExperiment.to_csv('./results/vaswani.csv', sep=";")
+
 
 
 
